@@ -5,7 +5,7 @@
 library(ggbio)
 library(rtracklayer)
 # import color states data
-h1_state <- import("data/states_dom_hESC.bed.gz")
+h1_state <- import("data/statesWithRepeats_dom_hESC.bed")
 head(h1_state)
 colnames(h1_state) <- "State"
 h1_state <- as(h1_state, "GRanges")
@@ -21,9 +21,9 @@ seqlevels(h1_state) = names(chr.len)
 seqlengths(h1_state) = (chr.len)
 print(h1_state)
 
-chrom.col <- c("black", "purple4", "gold2","deeppink2", "red")
+chrom.col <- c("black", "purple4", "gold2","deeppink2", "red", "grey")
 h1_state$State <- factor(h1_state$State, 
-                         levels=c('black', 'purple', 'yellow', 'pink','red'))
+                         levels=c('black', 'purple', 'yellow', 'pink','red', 'repeat'))
 p <- autoplot(h1_state, layout = "karyogram", aes(fill = State))
 p + scale_fill_manual(values = chrom.col) + opts(legend.position = "none") 
 
