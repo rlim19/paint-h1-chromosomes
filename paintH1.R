@@ -5,7 +5,7 @@
 library(ggbio)
 library(rtracklayer)
 # import color states data
-h1_state <- import("data/statesWithRepeats_dom_hESC.bed")
+h1_state <- import("data/Sorted_statesWithRepeats_dom_hESC.bed")
 head(h1_state)
 colnames(h1_state) <- "State"
 h1_state <- as(h1_state, "GRanges")
@@ -27,6 +27,6 @@ h1_state$State <- factor(h1_state$State,
 p <- autoplot(h1_state, layout = "karyogram", aes(fill = State))
 p + scale_fill_manual(values = chrom.col) + opts(legend.position = "none") 
 
-
+p <- autoplot(h1_state, layout = "circle", aes(fill = State))
 # circos's style
 p <- autoplot(h1_state, layout = "circle", aes(fill = State))
