@@ -47,7 +47,44 @@ for (i in levels(as.factor(data_bed$tag))){
  All_domains <- rbind(All_domains, dom)
 }
 
-head(All_domains)
-
 write.table(All_domains, "data/statesWithRepeats_dom_hESC.bed", quote=FALSE, row.names=FALSE, col.names=FALSE,
             sep="\t")
+
+# check the transition matrix of domains
+unsorted_domains <- read.table("data/PyStatesWithRepeats.bed")
+head(unsorted_domains)
+dim(unsorted_domains)
+source('/users/gfilion/rlim/R_misc/getTransitionMatrix.R')
+c('black', 'purple', 'yellow', 'pink','red', 'repeat'))
+
+numericDomains <- match(unsorted_domains$V4, c('repeat','black', 'purple', 'yellow', 'pink', 'red'))
+length(numericDomains)
+
+library(gplots)
+get_heatMat <- function(mat_, margins, Colv, Rowv, cutZero){
+  # construct heatmap, given a matrix
+  
+  library(gplots)
+  heatmap.2(mat_, col=hmcols<-colorRampPalette(c("green","yellow","red"))(256), 
+            Colv=Colv, Rowv=Rowv,
+            dendrogram="none", trace="none",
+            density.info = 'none',scale="none",
+            keysize=0.8, margins = margins,
+            symbreaks=cutZero)
+  
+  
+}
+
+trans_domain <- getTransitionMatrix(numericDomains)
+
+
+colnames(trans_domain) <- rownames(trans_domain) <-  c('repeat','black', 'purple', 'yellow', 'pink', 'red')
+get_heatMat(trans_domain, margins=c(5,10), Colv=NA, Rowv=TRUE, cutZero=FALSE)
+round(trans_domain*100,1)
+       repeat black purple yellow pink  red
+repeat    0.0  61.3   22.4   10.0  4.6  1.6
+black    87.6   0.0    6.9    1.6  2.6  1.3
+purple   53.1  11.4    0.0    5.7 24.2  5.6
+yellow   46.3   5.0   11.3    0.0 26.8 10.5
+pink     14.1   5.9   33.2   19.1  0.0 27.7
+red      10.0   5.6   15.0   15.5 53.9  0.0
